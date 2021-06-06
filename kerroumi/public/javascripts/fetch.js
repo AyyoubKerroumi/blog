@@ -3,6 +3,7 @@ function makeTable(table,data){
     for(let e of data)
     {
         let u={
+            id:e.id,
             username: e.username,
             email: e.email,
             password: e.password,
@@ -15,25 +16,29 @@ function makeTable(table,data){
         
         for (let j in u) {
               let cell = document.createElement("td");
-              if (j === "modifier") {
-                btn = document.createElement("BUTTON");
+              if (u[j] === "update") {
+                let btn = document.createElement("button");
                 btn.innerHTML=j;
                 btn.classList.add('btn');
-                btn.classList.add('btn-outline-danger');
+                btn.classList.add('btn-outline-info');
+                cell.appendChild(btn);
+                row.appendChild(cell);
                 btn.onclick = function() {
-                    document.querySelector("#modal1").classList.add("is-visible");
-                    document.querySelector("#update").setAttribute('action', `/users/:${e.id}`)
-                    cell.appendChild(btn);
-                }}
-            else if (j === "supprimer") {
-                btn = document.createElement("BUTTON");
-                btn.innerHTML=key;
-                btn.classList.add('btn');
-                btn.onclick = function() {
-                    fetch(`http://localhost:3000/users/:${e.id}`, {
-                        method: 'DELETE',
+                    fetch(`http://localhost:3000/users/${e.id}`, {
+                        method: 'put',
                     }).then(location.reload())
-                    cell.appendChild(btn);
+                }}
+            else if (u[j] === "delete") {
+                let btn = document.createElement("button");
+                btn.innerHTML = j;
+                cell.appendChild(btn);
+                row.appendChild(cell);
+                btn.classList.add('btn');
+                btn.classList.add("btn-outline-danger");
+                btn.onclick = function() {
+                    fetch(`http://localhost:3000/users/${e.id}`, {
+                        method: 'delete',
+                    }).then(location.reload())
                 }
             }
             else{
@@ -48,8 +53,6 @@ function makeTable(table,data){
 
 let table = document.querySelector("table");
 
-let response = await fetch("localhost:1331/");
-
-let commits = await response.json(); // read response body and parse as JSON
-
-makeTable(table,data);
+fetch('http://localhost:3000/users/all')
+    .then(response => response.json())
+    .then(data => makeTable(table, data));

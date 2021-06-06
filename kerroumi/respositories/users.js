@@ -42,7 +42,7 @@ module.exports = {
     deleteUser(id) {
         User.destroy({
             where: {
-                id: id
+                id: id,
             }
         })
     },

@@ -1,26 +1,26 @@
 const router = require('express').Router();
-const articlessRepo = require('../respositories/users.js');
+const articlessRepo = require('../respositories/articles.js');
 
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+/* GET articles listing. */
+router.get('/all', function(req, res, next) {
       articlessRepo.getAllArticles()
       .then((articles) => res.status(200).json(articles))
       .catch(err => console.log(err));
   });
   
-  router.get('/articles', async function(req, res, next) {
+  router.get('/', async function(req, res, next) {
     try {
       let offset=parseInt(req.query.offset);
       let limit=parseInt(req.query.limit);
-      res.send(await usersRepo.getUsers(offset,limit));
+      res.send(await articlessRepo.getAllArticles(offset,limit));
     } catch (err) {
       console.error(`Error`, err.message);
       next(err);
     }
   });
   
-  router.get('/articles/:id', async function(req, res, next) {
+  router.get('/:id', async function(req, res, next) {
     try {
       let id=req.params.id;
       res.send(await articlessRepo.getArticle(id));
@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
     }
   });
   
-  router.get('/articles/title/:title', async function(req, res, next) {
+  router.get('/title/:title', async function(req, res, next) {
     try {
       let title=req.params.title;
       res.send(await articlessRepo.getArticlesByTitle(title));
@@ -40,7 +40,7 @@ router.get('/', function(req, res, next) {
     }
   });
   
-  router.get('articles/user/:userId', async function(req, res, next) {
+  router.get('/user/:userId', async function(req, res, next) {
     try {
         let userId=req.params.userId;
         res.send(await articlessRepo.getArticleByUserId(userId));
@@ -50,7 +50,7 @@ router.get('/', function(req, res, next) {
     }
   });
 
-  router.post('/articles/add', async function(req, res, next) {
+  router.post('/add', async function(req, res, next) {
     try {
       const {title, content, UserId} = req.body;
       if(!title) {
@@ -66,7 +66,7 @@ router.get('/', function(req, res, next) {
             updatedAt: new Date(),
           }
         
-          articlesRepo.addUser(NewArticle);
+          articlesRepo.addArticle(NewArticle);
           res.status(200).redirect("http://localhost:3000/");
       }
     } catch (err) {
@@ -75,7 +75,7 @@ router.get('/', function(req, res, next) {
     }
 });
 
-router.put('/articles/:id',async function(req, res, next){
+router.put('/:id',async function(req, res, next){
     try {
       let id=req.params.id;
       let article=articlessRepo.getArticle(id);
@@ -83,8 +83,8 @@ router.put('/articles/:id',async function(req, res, next){
         res.status(404).json({message:"not found"});
       else
       {
-        usersRepo.updateUser(req.body,id);
-        res.status(200).redirect("http://localhost:8080/");
+        usersRepo.updateArticle(req.body,id,article);
+        res.status(200).redirect("http://localhost:3000/");
       }       
     } catch (err) {
       console.error(`Error`, err.message);
@@ -92,11 +92,11 @@ router.put('/articles/:id',async function(req, res, next){
     }
   });
   
-  router.delete('/articles/:id',async function(req, res, next){
+  router.delete('/:id',async function(req, res, next){
     try {
       let id=req.params.id;
       articlessRepo.deleteArticle(id);
-      res.status(200).redirect("http://localhost:1331/");
+      res.status(200).redirect("http://localhost:3000/");
     } catch (err) {
       console.error(`Error`, err.message);
       next(err);

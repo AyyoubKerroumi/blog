@@ -8,18 +8,16 @@ router.get('/', function(req, res, next) {
       .catch(err => console.log(err));
 });
 
-router.get('/users', async function(req, res, next) {
+router.get('/all', async function(req, res, next) {
   try {
-    let offset=parseInt(req.query.offset);
-    let limit=parseInt(req.query.limit);
-    res.send(await usersRepo.getUsers(offset,limit));
+    res.send(await usersRepo.getAllUsers());
   } catch (err) {
     console.error(`Error`, err.message);
     next(err);
   }
 });
 
-router.get('/users/:id', async function(req, res, next) {
+router.get('/id/:id', async function(req, res, next) {
   try {
     let id=req.params.id;
     res.send(await usersRepo.getUser(id));
@@ -29,7 +27,7 @@ router.get('/users/:id', async function(req, res, next) {
   }
 });
 
-router.get('/users/email/:email', async function(req, res, next) {
+router.get('/email/:email', async function(req, res, next) {
   try {
     let email=req.params.email;
     res.send(await usersRepo.getUserByEmail(email));
@@ -39,12 +37,12 @@ router.get('/users/email/:email', async function(req, res, next) {
   }
 });
 
-router.get('/users/role/:role', async function(req, res, next) {
+router.get('/role/:role', async function(req, res, next) {
   try {
     let role=req.params.role;
     switch(role)
     {
-      case "author":res.send(await usersRepo.getAuthors());break;
+      case "author":res.send(await usersRepo.getGuests());break;
       case "admin":res.send(await usersRepo.getGuests());break;
       case "guest":res.send(await usersRepo.getGuests());break;
     }
@@ -54,7 +52,7 @@ router.get('/users/role/:role', async function(req, res, next) {
   }
 });
 
-router.post('/users/add', async function(req, res, next) {
+router.post('/add', async function(req, res, next) {
   try {
     const {username, email, password, role} = req.body;
   if (!username || !email) 
@@ -69,7 +67,7 @@ router.post('/users/add', async function(req, res, next) {
               updatedAt: new Date(),
             }
             usersRepo.addUser(utilisateur);
-            res.status(200).redirect("http://localhost:8080/");
+            res.status(200).redirect("http://localhost:3000/");
             
   }
   } catch (err) {
@@ -79,7 +77,8 @@ router.post('/users/add', async function(req, res, next) {
   
 });
 
-router.put('/users/:id',async function(req, res, next){
+
+router.put('/:id',async function(req, res, next){
   try {
     let id=req.params.id;
     let user=usersRepo.getUser(id);
@@ -88,7 +87,7 @@ router.put('/users/:id',async function(req, res, next){
     else
     {
       usersRepo.updateUser(req.body,id);
-      res.status(200).redirect("http://localhost:8080/");
+      res.status(200).redirect("http://localhost:3000/");
     }       
   } catch (err) {
     console.error(`Error`, err.message);
@@ -96,11 +95,11 @@ router.put('/users/:id',async function(req, res, next){
   }
 });
 
-router.delete('/users/:id',async function(req, res, next){
+router.delete('/:id',async function(req, res, next){
   try {
     let id=req.params.id;
     usersRepo.deleteUser(id);
-    res.status(200).redirect("http://localhost:8080/");
+    res.status(200).redirect("http://localhost:3000/");
   } catch (err) {
     console.error(`Error`, err.message);
     next(err);

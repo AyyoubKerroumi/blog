@@ -2,14 +2,14 @@ const router = require('express').Router();
 const commentsRespo = require('../respositories/users.js');
 
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    articlessRepo.getAllArticles()
+/* GET comments listing. */
+router.get('/all', function(req, res, next) {
+    commentsRespo.getAllComments()
       .then((comments) => res.status(200).json(comments))
       .catch(err => console.log(err));
   });
   
-  router.get('/comments', async function(req, res, next) {
+  router.get('/', async function(req, res, next) {
     try {
       let offset=parseInt(req.query.offset);
       let limit=parseInt(req.query.limit);
@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
     }
   });
   
-  router.get('/comments/:id', async function(req, res, next) {
+  router.get('/:id', async function(req, res, next) {
     try {
       let id=req.params.id;
       res.send(await commentsRespo.getComment(id));
@@ -30,17 +30,9 @@ router.get('/', function(req, res, next) {
     }
   });
   
-  router.get('/comments/article/:articleId', async function(req, res, next) {
-    try {
-      let articleId=req.params.articleId;
-      res.send(await commentsRespo.getCommentByArticleId(articleId));
-    } catch (err) {
-      console.error(`Error`, err.message);
-      next(err);
-    }
-  });
+ 
   
-  router.get('comments/article/:id', async function(req, res, next) {
+  router.get('/article/:id', async function(req, res, next) {
     try {
         let id=req.params.id;
         res.send(await commentsRespo.getCommentByArticleId(id));
@@ -50,7 +42,7 @@ router.get('/', function(req, res, next) {
     }
   });
 
-  router.post('/comments/add', async function(req, res, next) {
+  router.post('/add', async function(req, res, next) {
     try {
         const {content, ArticleId} = req.body;
         const NewComment = {
@@ -60,14 +52,14 @@ router.get('/', function(req, res, next) {
             updatedAt: new Date(),
           }
           commentsRespo.addComment(NewComment);
-          res.status(200).redirect("http://localhost:8080/");
+          res.status(200).redirect("http://localhost:3000/");
     } catch (err) {
         console.error(`Error`, err.message);
         next(err);
     }
 });
 
-router.put('/comments/:id',async function(req, res, next){
+router.put('/:id',async function(req, res, next){
     try {
       let id=req.params.id;
       let article=commentsRespo.getArticle(id);
@@ -75,8 +67,8 @@ router.put('/comments/:id',async function(req, res, next){
         res.status(404).json({message:"not found"});
       else
       {
-        usersRepo.updateUser(req.body,id);
-        res.status(200).redirect("http://localhost:8080/");
+        usersRepo.updateComment(articlereq.body,id);
+        res.status(200).redirect("http://localhost:3000/");
       }       
     } catch (err) {
       console.error(`Error`, err.message);
@@ -84,11 +76,11 @@ router.put('/comments/:id',async function(req, res, next){
     }
   });
   
-  router.delete('/comments/:id',async function(req, res, next){
+  router.delete('/:id',async function(req, res, next){
     try {
       let id=req.params.id;
-      commentsRespo.deleteArticle(id);
-      res.status(200).redirect("http://localhost:8080/");
+      commentsRespo.deleteComment(id);
+      res.status(200).redirect("http://localhost:3000/");
     } catch (err) {
       console.error(`Error`, err.message);
       next(err);
