@@ -28,7 +28,7 @@ module.exports = {
         return User.findAll({where: {role: "guest"}});
     },
     getUser(id) {
-        return User?.findAll({where:{id: id}});
+        return User.findAll({where:{id: id}});
     },
     getUserByEmail(email) {
         return User.findAll({where: {email: email}});
@@ -36,8 +36,12 @@ module.exports = {
     addUser(user) {
         User.create(user);
     },
-    updateUser(id, user) {
-        User.update(user, {where: {id: id}});
+    updateUser(id,user) {
+        User.update(user, {
+            where: {
+                id: id
+            }
+        });
     },
     deleteUser(id) {
         User.destroy({

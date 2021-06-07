@@ -78,7 +78,7 @@ router.post('/add', async function(req, res, next) {
 });
 
 
-router.put('/:id',async function(req, res, next){
+router.post('/:id',async function(req, res, next){
   try {
     let id=req.params.id;
     let user=usersRepo.getUser(id);
@@ -86,7 +86,7 @@ router.put('/:id',async function(req, res, next){
       res.status(404).json({});
     else
     {
-      usersRepo.updateUser(req.body,id);
+      usersRepo.updateUser(id,req.body);
       res.status(200).redirect("http://localhost:3000/");
     }       
   } catch (err) {
