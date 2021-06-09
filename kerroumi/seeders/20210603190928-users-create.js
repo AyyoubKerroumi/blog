@@ -6,15 +6,15 @@ module.exports = {
   let N=20;
   let users=[];
   let roles=["admin","author","guest"];
-  for(let id=1;id <= 20;id++)
+  for(let i=1;i <= 20;i++)
   {
     let u_name = faker.internet.userName();
     let email = faker.internet.email();
     let password=faker.internet.password();
-    let date = faker.date.between(1970, 2021);
-    let indice=faker.random.number(1, 3);
+    let date = faker.date.between(2000, 2021);
+    let indice=faker.random.number({min:0, max:2});
     users.push({
-      id: id,
+      id: i,
       username: u_name,
       password:password,
       email: email,
