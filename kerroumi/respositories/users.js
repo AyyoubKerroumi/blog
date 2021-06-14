@@ -18,7 +18,7 @@ module.exports = {
         });
     },
     getAuthors() {
-        return User?.findAll({
+        return User.findAll({
             where: {
                 role: "author"
             }
