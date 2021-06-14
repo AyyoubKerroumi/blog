@@ -1,7 +1,5 @@
 
 
-
-
 function makeTable(table,data){
     for(let e of data)
     {
@@ -61,10 +59,7 @@ function makeTable(table,data){
 
 let table = document.querySelector("table");
 
-if(table)
-{
-    fetch('http://localhost:3000/users/all')
+fetch('http://localhost:3000/users/all')
         .then(response => response.json())
         .then(data => makeTable(table, data));
-}
 

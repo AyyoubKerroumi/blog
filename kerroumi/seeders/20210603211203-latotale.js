@@ -25,7 +25,6 @@ module.exports = {
         });
         
       } 
-      console.log(users['1']);
       ///les articles
       let articles=[];
       let numberOfArticles=0;
@@ -49,7 +48,6 @@ module.exports = {
           })
         }
       }
-      console.log(articles['1']);
       ///les tags
       let tags=[];
       let N3=10;
@@ -66,7 +64,6 @@ module.exports = {
 
         })
       }
-      console.log(users['1']);
     ///les tags de chaque article
     let articleTags = [];
     for(let i=1;i<=10;i++) {
@@ -82,7 +79,7 @@ module.exports = {
         })
       }
     }
-    console.log(users['1']);
+
 
     ///les commentaires de chaque article
     let comments = [];
@@ -102,18 +99,11 @@ module.exports = {
         })
       }
     }
-    console.log(comments['1']);
-      console.log(1);
+
       await queryInterface.bulkInsert('articles', articles, {});
-      console.log(33);
       await queryInterface.bulkInsert('comments', comments, {});
-      console.log(2);
       await queryInterface.bulkInsert('tags', tags, {});
-      console.log(3);
       await queryInterface.bulkInsert('articletags', articleTags, {});
-      console.log(4);
-      await queryInterface.bulkInsert('Users', users, {});
-      console.log(5);
   },
 
   down: async (queryInterface, Sequelize) => {
